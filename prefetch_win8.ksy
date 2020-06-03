@@ -37,7 +37,7 @@ types:
         size: 60
         encoding: UTF-16LE
       - id: prefetch_hash
-        type: u4
+        size: 4
       - id: unknown_bits_2
         size: 4
   file_information:
