@@ -37,7 +37,7 @@ types:
         size: 60
         encoding: UTF-16LE
       - id: prefetch_hash
-        size: 4
+        type: u4
       - id: unknown_bits_2
         size: 4
   file_information:
@@ -63,7 +63,9 @@ types:
       - id: unknown_bits_1
         size: 8
       - id: last_execution_time
-        size: 64
+        type: u8
+      - id: other_execution_times
+        size: 56
       - id: unknown_bits_2
         size: 16
       - id: run_count
