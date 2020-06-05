@@ -1,7 +1,7 @@
 from argparse import ArgumentParser, Namespace
 from datetime import datetime, timedelta
 
-from prefetch_win8 import *
+from src.prefetch import *
 
 def convert_timestamp(ts) -> str:
     dt =  datetime(1601,1,1) + timedelta(seconds=ts/10000000)
@@ -16,13 +16,18 @@ def parse_prefetch(args: Namespace):
     Preconditions:
         Windows 8.1 Prefetch only
     """
-    pf = PrefetchWin8.from_file(args.source)
+    print("Prefetch File: %s" % (args.source))
+    print(("_" * 15) + "_" * len(args.source))
+    #print("_____________________________________________")
+    pf = Prefetch.from_file(args.source)
     print("File Name: %s" % (pf.header.file_name))
     print("File Hash: %s" % (hex(pf.header.prefetch_hash).strip('0x').upper()))
-    print("File Size (bytes): %s" % (pf.header.file_size))
-    print("\n")
-    print("Last Execution Time: %s" % (convert_timestamp(pf.fileinformation.last_execution_time)))
-
+    print("File Size (bytes): %s\n" % (pf.header.file_size))
+    print("Last Execution Time: %s\n" % (convert_timestamp(pf.fileinformation.last_execution_time)))
+    print("Other Execution Times: ")
+    for ts in pf.fileinformation.other_execution_times:
+        if ts != 0:
+            print(convert_timestamp(ts))
 
 def initialize_parser() -> ArgumentParser:
     parser=ArgumentParser(prog="prefetch_parser", description="Parse Windows Prefetch File")
