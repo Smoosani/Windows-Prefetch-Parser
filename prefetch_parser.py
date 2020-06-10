@@ -18,16 +18,21 @@ def parse_prefetch(args: Namespace):
     """
     print("Prefetch File: %s" % (args.source))
     print(("_" * 15) + "_" * len(args.source))
-    #print("_____________________________________________")
     pf = Prefetch.from_file(args.source)
     print("File Name: %s" % (pf.header.file_name))
     print("File Hash: %s" % (hex(pf.header.prefetch_hash).strip('0x').upper()))
     print("File Size (bytes): %s\n" % (pf.header.file_size))
     print("Last Execution Time: %s\n" % (convert_timestamp(pf.fileinformation.last_execution_time)))
     print("Other Execution Times: ")
-    for ts in pf.fileinformation.other_execution_times:
+    for ts in pf.fileinformation.older_execution_times:
         if ts != 0:
             print(convert_timestamp(ts))
+    print("\n")
+    print("Resources Loaded")
+    fs = pf.filenamestrings.filenames_string.hex()
+    lst = fs.split("0000")
+    for i in lst:
+        print(bytes.fromhex(i).decode('ascii'))
 
 def initialize_parser() -> ArgumentParser:
     parser=ArgumentParser(prog="prefetch_parser", description="Parse Windows Prefetch File")
